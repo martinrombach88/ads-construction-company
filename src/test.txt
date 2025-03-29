@@ -1,0 +1,203 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
+
+public void main() {
+    TableConsoleApp app = new TableConsoleApp();
+    app.runUserMenu();
+}
+
+class TableConsoleApp {
+    //scanner takes user input
+    private Scanner scanner = new Scanner(System.in);
+    private ArrayList<ProjectTable> projectTables = new ArrayList<>();
+    private ArrayList<EmployeeTable> employeeTables = new ArrayList<>();
+
+    void runUserMenu() {
+        boolean programRunning = true;
+        print("Welcome to the projects and employees management system");
+
+        while(programRunning) {
+            print("Please select an option: ");
+            print("p add a project table | e add an employee table ");
+            print("o add project | r add employee");
+            print("i print projects | t print employees");
+
+            String command = scanner.nextLine();
+            switch (command.toLowerCase()) {
+                case "p":
+                    addProjectTable();
+                    break;
+                case "o":
+                    addProject();
+                    break;
+                case "i":
+                    printProjectTableTitles();
+                    break;
+                case "e":
+                    addEmployeeTable();
+                    break;
+                case "r":
+                    addEmployee();
+                    break;
+                case "t":
+                    printEmployeeTableTitles();
+                    break;
+                case "q":
+                    programRunning = false;
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid command.");
+                    break;
+            }
+        }
+    }
+
+    void addProjectTable() {
+        print("Input your table title: ");
+        String title = scanner.nextLine();
+        ProjectTable userProjectTable = new ProjectTable(title);
+        projectTables.add(userProjectTable);
+        print("Table " + title + " added. Returning to menu.");
+    }
+
+    void addProject() {}
+
+    void printProjectTableTitles() {
+        print("Current project tables: ");
+        for (int i = 0; i < projectTables.size(); i++) {
+            System.out.println(i + " " + projectTables.get(i).tableTitle);
+        }
+    }
+
+    void addEmployeeTable() {
+        print("Input your table title: ");
+        String title = scanner.nextLine();
+        EmployeeTable userEmployeeTable = new EmployeeTable(title);
+        employeeTables.add(userEmployeeTable);
+        print("Table " + title + " added. Returning to menu.");
+    }
+
+    void addEmployee() {
+        String employeeId,
+        String firstName,
+        String lastName,
+        String department,
+        String role,
+        print("Input your table title: ");
+        Employee employee = new Employee();
+
+    }
+
+    void printEmployeeTableTitles() {
+        print("Current employee tables: ");
+        for (int i = 0; i < employeeTables.size(); i++) {
+            System.out.println(i + " " + employeeTables.get(i).tableTitle);
+        }
+    }
+
+    void getItemById() {
+
+    }
+    void getItemCount() {
+        int projectCount = 0;
+    }
+
+    void getHighestValue() {
+        int highestCost = 0;
+    }
+
+    void getLowestValue() {
+        int lowest = 0;
+    }
+
+    void getTotalValue() {
+
+    }
+
+    void sortByName() {
+
+    }
+    void sortByValue() {
+
+    }
+
+    void print(String message){
+        System.out.println(message);
+    }
+}
+
+class EmployeeTable {
+    String tableTitle;
+    private HashMap<Double,Employee > employees = new HashMap<>();
+    String id;
+    public EmployeeTable(String tableTitle) {
+        this.tableTitle = tableTitle;
+    }
+
+}
+
+class ProjectTable {
+    String tableTitle;
+    private HashMap<Double, Project> columns = new HashMap<>();
+    String id;
+    public ProjectTable(String tableTitle) {
+        this.tableTitle = tableTitle;
+    }
+}
+
+class Employee {
+    private String employeeId;
+    private String firstName;
+    private String lastName;
+    private String department;
+    private String role;
+
+    public Employee(String employeeId, String firstName, String lastName,
+                    String department, String role) {
+        this.employeeId = employeeId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.department = department;
+        this.role = role;
+    }
+
+    // Getters
+    public String getEmployeeId() { return employeeId; }
+    public String getFirstName() { return firstName; }
+    public String getLastName() { return lastName; }
+    public String getDepartment() { return department; }
+    public String getRole() { return role; }
+}
+
+class Project {
+    private String projectId;
+    private String projectName;
+    private String projectDescription;
+    private double projectCost;
+    private String startDate;
+    private String endDate;
+
+    public Project(String projectId, String projectName, String projectDescription,
+                   double projectCost, String startDate, String endDate) {
+        this.projectId = projectId;
+        this.projectName = projectName;
+        this.projectDescription = projectDescription;
+        this.projectCost = projectCost;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    // Getters
+    public String getProjectId() { return projectId; }
+    public String getProjectName() { return projectName; }
+    public String getProjectDescription() { return projectDescription; }
+    public double getProjectCost() { return projectCost; }
+    public String getStartDate() { return startDate; }
+    public String getEndDate() { return endDate; }
+}
+
+protected double getTableHash() {
+    return Math.random();
+}

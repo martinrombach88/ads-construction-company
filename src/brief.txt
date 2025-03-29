@@ -1,0 +1,123 @@
+Assessment Background/Scenario
+
+A construction company requires an application to efficiently manage its
+ projects and employee assignments. The company undertakes multiple construction
+ projects, each requiring a team of workers with specific roles. The application
+  should enable users to input and store project data, assign employees to projects
+  along with their roles, and perform essential operations such as tracking project
+  costs, sorting employee and project data, and retrieving key project details for
+  effective management.
+Project data includes Project ID, Project Name, Project Description,
+Project Cost, Start Date, and End Date as shown in Table 1.
+Employee data in Table 2 includes Employee ID, First Name, Last Name,
+Department, and Role. The application should store this data in an appropriate
+ internal structure.
+
+ Design and build a console-based application that requires the user to input
+ the project and employee data via the console/command line and store it in an
+  appropriate internal structure. There is no requirement for this data to be
+   preserved after the application is closed. You will need to consider what
+   the application outputs to the user to demonstrate the results of each task below.
+   You should provide the user with a means to close the program once operations are
+   complete.
+
+Assignment Tasks
+
+Your application should be able to perform the following tasks given the scenario above:
+Task A: Write pseudocode algorithms for the following tasks given below.
+1) Take as input, the project data (Project ID, Project Name, Project Description,
+Project Cost,  Start Date, and End Date) and store it in an appropriate data structure.
+The Project ID should be auto-incremental.
+2) Take as input, the employee data (Employee ID, First Name, Last Name, Department,
+ and Role) and store it in an appropriate data structure. The Employee ID should be
+  auto-incremental.
+3) Count the total number of projects and calculate their combined cost based on the
+projects’ data as shown in Table 3.
+
+Total Projects	Combined total cost
+            6	          £16200000
+
+4) Search and display the project based on the highest project cost as shown in Table 4.
+
+Project ID	Project Name	Project Cost
+C104	Bridge Construction	£ 4400000
+
+5) Search and display the project based on the lowest project cost as shown in Table 5.
+
+Project ID	Project Name	Project Cost
+C103	Commercial Plaza	£ 1400000
+
+6) Sort all employee’s data  alphabetically by  last name, as shown in Table 6.
+   Table 6: Sample Employees' Data, sorted alphabetically by last name.
+
+   Employee ID	First Name	Last Name	Department	Role
+   E406	Olivia	Brown	Site Operations	Construction Site Supervisor
+   E401	Michael	Johnson	Civil Engineering	Structural Engineer
+   E404	Sophia	Martinez	Safety & Compliance	Safety Officer
+   E402	Anna	Rodriguez	Architecture	Architect
+   E403	James	Thompson	Project Management	Project Manager
+   E405	David	Wilson	Electrical Engineering	Electrical Engineer
+
+7) Sort all Project’s data  by project  cost (highest cost first), as shown in Table 7.
+
+Table 7: Sample Projects’ Data-highest cost first
+Project ID	Project Name	Project Description	Project Cost	Start Date	End Date
+C104	Bridge Construction	Building a new suspension bridge over the river	£ 4400000	05/10/2023	10/08/2025
+C106	Airport Terminal Upgrade	Renovation and expansion of the airport terminal	£ 3900000	10/12/2023	31/07/2025
+C102	Highway Expansion	Expanding a major highway to improve traffic flow	£ 2400000	01/08/2023	30/06/2025
+C105	Industrial Warehouse	Constructing a warehouse for storage and distribution	£ 2100000	20/11/2023	30/09/2024
+C101	Residential Tower	Construction of a 25-story residential building	£ 2000000	10/07/2023	15/12/2024
+C103	Commercial Plaza	Developing a shopping and office complex	£ 1400000	15/09/2023	20/05/2024
+
+8) Take user input for Project ID, Employee ID, and Role,
+then assign the employee to the specified project with the given role as shown in Table 8.
+   Sample: user input
+   "Enter the Project ID: C103
+   Enter the Employee ID: E405
+   Enter the Role: Electrical Engineer"
+
+Table 8: Sample Projects’ Data—employee assigned to the project
+   "Project ID	Project Name	Employee ID	Role	First Name	Last Name
+   C103	Commercial Plaza	E405	Electrical Engineer	David	Wilson
+   "
+
+
+Task B: Construct the application and implement algorithms.
+Develop a single Java program that enables the user to store, search, and
+manage project and employee data
+by using algorithms studied in this module, which are run from the command line.
+The application should be a
+text-based, menu-driven system with a console menu.
+
+Implement all the algorithms you have created for Task A.
+Note:
+You need to ensure that the user input is validated, and feedback is given when
+ an invalid input is entered.
+Test all the implemented algorithms you have created for Task A.
+
+Exam:
+1) The exam will take new data on exam day.
+Questions for that (could be different on exam day)
+- State how it would respond, if errors are generated (which algo generates it)
+
+2) Discuss how you would change your program effectively
+and how to communicate the error to the user
+- Prepare error handling basics. In the exam, explain changes for the
+particular edge case
+
+3) Discuss how you would test for the error and handle it
+- Priorities would be around ensuring the program doesn't
+stop, or avoiding stack overflows and memory overuse
+
+4) Demonstrate the use of decomposition of a problem
+best practice in code reuse
+OOP
+In relation to one of the requirements of the project
+
+5) Upload the code in a pdf/jpg or png that demonstrates
+question 4 part 1
+
+6) Design an algo that fulfills a new task specified
+in the exam. Show which algos you are reusing.
+Upload the file as a pdf / image
+

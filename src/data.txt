@@ -1,0 +1,19 @@
+Table 1: Sample Projects’ Data.
+
+Project ID	Project Name	Project Description	Project Cost	Start Date	End Date
+C101	Residential Tower	Construction of a 25-story residential building	£ 2000000	10/07/2023	15/12/2024
+C102	Highway Expansion	Expanding a major highway to improve traffic flow	£ 2400000	01/08/2023	30/06/2025
+C103	Commercial Plaza	Developing a shopping and office complex	£ 1400000	15/09/2023	20/05/2024
+C104	Bridge Construction	Building a new suspension bridge over the river	£ 4400000	05/10/2023	10/08/2025
+C105	Industrial Warehouse	Constructing a warehouse for storage and distribution	£ 2100000	20/11/2023	30/09/2024
+C106	Airport Terminal Upgrade	Renovation and expansion of the airport terminal	£ 3900000	10/12/2023	31/07/2025
+
+Table 2: Sample Employees' Data.
+
+Employee ID	First Name	Last Name	Department	Role
+E401	Michael	Johnson	Civil Engineering	Structural Engineer
+E402	Anna	Rodriguez	Architecture	Architect
+E403	James	Thompson	Project Management	Project Manager
+E404	Sophia	Martinez	Safety & Compliance	Safety Officer
+E405	David	Wilson	Electrical Engineering	Electrical Engineer
+E406	Olivia	Brown	Site Operations	Construction Site Supervisor
