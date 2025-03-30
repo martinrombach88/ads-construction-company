@@ -10,6 +10,7 @@ class TableConsoleApp {
     private Scanner scanner = new Scanner(System.in);
     private ProjectTable projectTable = new ProjectTable('C');
     private EmployeeTable employeeTable = new EmployeeTable('E');
+    private ArrayList<ProjectAssignment> projectAssignments = new ArrayList<>();
 
     void runUserMenu() {
         boolean programRunning = true;
@@ -39,11 +40,30 @@ class TableConsoleApp {
                     print("Lowest cost project: ");
                     projectTable.minMaxCostProject(isMaxProject);
                     break;
+                case "c":
+                    print("Projects by cost, descending: ");
+                    ArrayList<Project> sortedProjects = projectTable.mergeSortByCost(projectTable.projects);
+                    projectTable.printProjects(sortedProjects);
+                    break;
                 case "e":
                     addEmployee();
                     break;
                 case "f":
                     employeeTable.printEmployees();
+                    break;
+                case "g":
+                    ArrayList<Employee> sortedEmployees = employeeTable.mergeSortByLastName(employeeTable.employees);
+                    employeeTable.printEmployees(sortedEmployees);
+                    break;
+                case "r":
+                    assignEmployeeToProject();
+                    break;
+                case "s":
+                    if (projectAssignments.isEmpty()){
+                        print("No employees assigned to projects.");
+                    } else {
+                        printAssignments();
+                    }
                     break;
                 case "h":
                     printMenu();
@@ -91,20 +111,73 @@ class TableConsoleApp {
         employee.role = scanner.nextLine();
 
         employeeTable.employees.add(employee);
+
         print("Employee " + employee.firstName + " " + employee.lastName + " added.");
+
+
     }
+
+    private void assignEmployeeToProject() {
+        String id = "";
+        String role = "";
+        String projectId = "";
+
+        print("enter employee id");
+        id = scanner.nextLine();
+        print("enter employee role");
+        role = scanner.nextLine();
+        print("enter the id of the project you would like to assign them to");
+        projectId = scanner.nextLine();
+
+        if (id.isEmpty() || role.isEmpty() || projectId.isEmpty()) {
+            print("invalid input");
+        } else {
+            Project project = projectTable.getProjectFromTable(projectId);
+
+            if (project.projectName.isEmpty()) {
+                print("project doesn't exist");
+                return;
+            }
+            Employee employee = employeeTable.getEmployeeByIdAndRole(id, role);
+
+            if (employee.firstName.isEmpty()) {
+                print("project doesn't exist");
+                return;
+            }
+
+
+            ProjectAssignment assignment = new ProjectAssignment();
+
+            assignment.firstName = employee.firstName;
+            assignment.lastName = employee.lastName;
+            assignment.role = employee.role;
+            assignment.employeeID = employee.employeeId;
+            assignment.projectID = project.projectId;
+            assignment.projectName = project.projectName;
+
+            projectAssignments.add(assignment);
+            print("Employee " + employee.employeeId + " added to project" + projectId);
+        }
+
+   }
+
+   void printAssignments() {
+        for (ProjectAssignment pa : projectAssignments) {
+            print(pa.toString());
+        }
+   }
 
     void printMenu() {
         print("View commands:");
+        print("h help | q quit");
+        print("p add project | e add employee");
+        print("r assign employee to project");
         print("l projects by id | f employees by id");
-        print("c projects by cost | a employees alphabetically");
+        print("c projects by cost | g employees alphabetically");
         print("t total projects and cost ");
         print("m most expensive project");
         print("b cheapest project");
 
-        print("Misc Commands");
-        print("p add project | e add employee");
-        print("h help | e exit");
     }
 
 }
@@ -112,6 +185,7 @@ class TableConsoleApp {
 class ProjectTable {
     private ArrayList<Project> projects = new ArrayList<>();
     char idPrefix;
+
     public ProjectTable(char idPrefix) {
         this.idPrefix = idPrefix;
     }
@@ -122,6 +196,14 @@ class ProjectTable {
             project.printString();
         }
     }
+
+    public void printProjects(ArrayList<Project> projects) {
+        print("Current projects:");
+        for (Project project : projects) {
+            project.printString();
+        }
+    }
+
     public void totalProjectsAndCost() {
         int sum = 0;
         for (Project project : projects) {
@@ -135,6 +217,7 @@ class ProjectTable {
         String resultName = "";
         String resultId = "";
         int sameCost = 0;
+        //linear search
         for (Project project : projects) {
             if (isMaxResult) {
                 if (project.projectCost > resultCost) {
@@ -142,8 +225,7 @@ class ProjectTable {
                     resultName = project.projectName;
                     resultId = project.projectId;
                 }
-            }
-            else {
+            } else {
                 if (project.projectCost < resultCost) {
                     resultCost = project.projectCost;
                     resultName = project.projectName;
@@ -168,57 +250,56 @@ class ProjectTable {
         }
     }
 
-    /*
-    public void sortByCost() {
-        ArrayList sortedProjects = mergeSort(projects);
 
+    ArrayList<Project> mergeSortByCost(ArrayList<Project> list) {
+        if (list.size() ==1) return list;
+        int midIndex = list.size() / 2;
+
+        ArrayList<Project> leftList = mergeSortByCost(new ArrayList<>(list.subList(0, midIndex)));
+        ArrayList<Project> rightList = mergeSortByCost(new ArrayList<>(list.subList(midIndex, list.size())));
+
+        return merge(leftList, rightList);
     }
 
-    int[] mergeSort(ArrayList list) {
-
-
-
-        //pivot is the mid index to target
-        if (list.length ==1) return list;
-        int pivot = list.length / 2;
-
-        int[] left = mergeSort(Arrays.copyOfRange(list, 0, pivot));
-        int[] right = mergeSort(Arrays.copyOfRange(list, pivot, list.length));
-
-        return merge(left, right);
-    }
-    */
-    int[] merge(int[] array1, int[] array2) {
-        int[] combined = new int[array1.length + array2.length];
-        int index = 0;
+    ArrayList<Project> merge(ArrayList<Project> list1, ArrayList<Project> list2) {
+        ArrayList<Project> combined = new ArrayList<>();
         int i = 0;
         int j = 0;
-
-        while (i < array1.length && j < array2.length) {
-            if (array1[i] < array2[j]) {
-                combined[index] = array1[i];
-                index++;
+        while (i < list1.size() && j < list2.size()) {
+            if(list1.get(i).projectCost > list2.get(j).projectCost) {
+                combined.add(list1.get(i));
                 i++;
             } else {
-                combined[index] = array2[j];
-                index++;
+                combined.add(list2.get(j));
                 j++;
             }
         }
-        while (i < array1.length) {
-            combined[index] = array1[i];
-            index++;
+        while (i < list1.size()) {
+            combined.add(list1.get(i));
             i++;
         }
-        while(j < array2.length) {
-            combined[index] = array2[j];
-            index++;
+        while (j < list2.size()) {
+            combined.add(list2.get(j));
             j++;
         }
         return combined;
     }
+    Project getProjectFromTable(String projectId) {
+        Project emptyProject = new Project();
+
+        for (Project project : projects) {
+            if (project.projectId.equals(projectId)) {
+                return project;
+            }
+        }
+
+        return emptyProject;
+    }
+
+
 
 }
+
 class EmployeeTable {
     private ArrayList<Employee> employees = new ArrayList<>();
     char idPrefix;
@@ -235,8 +316,63 @@ class EmployeeTable {
             employee.printString();
         }
     }
+
+    public void printEmployees(ArrayList<Employee> employees ) {
+        print("Current employees:");
+        for (Employee employee : employees) {
+            employee.printString();
+        }
+    }
+
+    ArrayList<Employee> mergeSortByLastName(ArrayList<Employee> list) {
+        if (list.size() ==1) return list;
+        int midIndex = list.size() / 2;
+
+        ArrayList<Employee> leftList = mergeSortByLastName(new ArrayList<>(list.subList(0, midIndex)));
+        ArrayList<Employee> rightList = mergeSortByLastName(new ArrayList<>(list.subList(midIndex, list.size())));
+
+        return mergeByLastName(leftList, rightList);
+    }
+
+    ArrayList<Employee> mergeByLastName(ArrayList<Employee> list1, ArrayList<Employee> list2) {
+        ArrayList<Employee> combined = new ArrayList<>();
+        int i = 0;
+        int j = 0;
+
+
+        while (i < list1.size() && j < list2.size()) {
+            if(Character.getNumericValue(list1.get(i).lastName.charAt(0)) < Character.getNumericValue(list2.get(j).lastName.charAt(0))) {
+                combined.add(list1.get(i));
+                i++;
+            } else {
+                combined.add(list2.get(j));
+                j++;
+            }
+        }
+        while (i < list1.size()) {
+            combined.add(list1.get(i));
+            i++;
+        }
+        while (j < list2.size()) {
+            combined.add(list2.get(j));
+            j++;
+        }
+        return combined;
+    }
+
+    Employee getEmployeeByIdAndRole(String id, String role) {
+        Employee result = new Employee();
+        for (Employee employee : employees) {
+            if (employee.employeeId.equals(id) && employee.role.equals(role)) {
+                result = employee;
+            }
+        }
+
+        return result;
+    }
 }
-class Project implements Comparable<Project>{
+
+class Project {
     private String projectId;
     private String projectName;
     private String projectDescription;
@@ -248,11 +384,7 @@ class Project implements Comparable<Project>{
         this.projectId = projectId;
     }
 
-    @Override
-    public int compareTo(Project comparedProject) {
-        //numeric representation of project comparison
-        return Integer.compare(this.projectCost, comparedProject.projectCost);
-    }
+    public Project() {}
 
     // Setters
     public void setProjectId(String projectId) {
@@ -279,6 +411,7 @@ class Project implements Comparable<Project>{
         this.endDate = endDate;
     }
 
+
     void printString() {
         System.out.println(STR."""
             Project Details:
@@ -289,32 +422,21 @@ class Project implements Comparable<Project>{
             Start Date: \{startDate}
             End Date: \{endDate}""");
     }
-
-
 }
 
-
-
-class Employee implements Comparable<Employee>{
+class Employee{
     private String employeeId;
     private String firstName;
     private String lastName;
     private String department;
     private String role;
 
+
     public Employee(String employeeId) {
         this.employeeId = employeeId;
     }
 
-    @Override
-    public int compareTo(Employee comparedEmployee) {
-        //converting the first letter of the last name into a numeric value
-        int ascLastName = Character.getNumericValue(this.lastName.charAt(0));
-        int ascComparedLastName = Character.getNumericValue(comparedEmployee.lastName.charAt(0));
-
-        //comparing the value and returning a numeric representation of result
-        return Integer.compare(ascLastName, ascComparedLastName);
-    }
+    public Employee(){}
 
     // Getters
     public String getEmployeeId() { return employeeId; }
@@ -322,27 +444,6 @@ class Employee implements Comparable<Employee>{
     public String getLastName() { return lastName; }
     public String getDepartment() { return department; }
     public String getRole() { return role; }
-
-    // Setters
-    public void setEmployeeId(String employeeId) {
-        this.employeeId = employeeId;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 
     void printString() {
         System.out.println(STR."""
@@ -354,8 +455,77 @@ class Employee implements Comparable<Employee>{
             Role: \{role}""");
     }
 
-
 }
+
+public class ProjectAssignment {
+    private String projectID;
+    private String projectName;
+    private String employeeID;
+    private String role;
+    private String firstName;
+    private String lastName;
+
+    public String getProjectID() {
+        return projectID;
+    }
+
+    public void setProjectID(String projectID) {
+        this.projectID = projectID;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getEmployeeID() {
+        return employeeID;
+    }
+
+    public void setEmployeeID(String employeeID) {
+        this.employeeID = employeeID;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    @Override
+    public String toString() {
+        return "ProjectAssignment{" +
+                "projectID='" + projectID + '\'' +
+                ", projectName='" + projectName + '\'' +
+                ", employeeID='" + employeeID + '\'' +
+                ", role='" + role + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
+}
+
 
 
 
@@ -375,3 +545,4 @@ public String createId(char prefix) {
 void print(String message){
     System.out.println(message);
 }
+
